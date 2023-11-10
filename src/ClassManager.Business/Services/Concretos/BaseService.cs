@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace ClassManager.Business.Services.Concretos;
 
-public abstract class BaseService<TEntity> where TEntity : BaseEntity
+public abstract class BaseService
 {
-    protected bool Validar(IValidator<TEntity> validator, TEntity entidade)
+    protected bool Validar<TEntity>(IValidator<TEntity> validator, TEntity entidade) where TEntity : BaseEntity
     {
         var validation = validator.Validate(entidade);
         if (validation.IsValid)

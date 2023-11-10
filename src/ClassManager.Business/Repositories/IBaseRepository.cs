@@ -1,9 +1,8 @@
-
 using ClassManager.Business.Entities;
 
 namespace ClassManager.Business.Repositories;
 
-public interface IRepository<TEntity> where TEntity : BaseEntity
+public interface IBaseRepository<TEntity> where TEntity : BaseEntity
 {
     TEntity Adicionar(TEntity entidade);
     Task<TEntity> ObterPorId(Guid id);

@@ -7,14 +7,18 @@ using ClassManager.Business.Services.Interfaces;
 
 namespace ClassManager.Business.Services.Concretos;
 
-public class UsuarioService : BaseService<Usuario>, IUsuarioService
+public class UsuarioService : BaseService, IUsuarioService
 {
-    private readonly IMapper _mapper;
     private readonly IUsuarioRepository _usuarioRepository;
+    public UsuarioService(IUsuarioRepository usuarioRepository)
+    {
+        _usuarioRepository = usuarioRepository;
+    }
+
     public async Task<Usuario?> Adicionar(UsuarioCriacaoDto dto)
     {
         // Validar usuário
-        var usuario = _mapper.Map<Usuario>(dto);
+        var usuario = new Usuario();
         if (!Validar(new UsuarioValidator(), usuario))
             return null;
             
