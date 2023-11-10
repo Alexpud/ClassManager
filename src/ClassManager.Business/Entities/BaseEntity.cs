@@ -1,5 +1,4 @@
-﻿
-namespace ClassManager.Business.Entidades
+﻿namespace ClassManager.Business.Entities
 {
     public class BaseEntity
     {

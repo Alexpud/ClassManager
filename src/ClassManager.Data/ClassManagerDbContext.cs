@@ -1,5 +1,5 @@
 using System.Reflection;
-using ClassManager.Business.Entidades;
+using ClassManager.Business.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClassManager.Data

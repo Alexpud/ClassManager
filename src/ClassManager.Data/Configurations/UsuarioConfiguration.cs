@@ -1,4 +1,4 @@
-using ClassManager.Business.Entidades;
+using ClassManager.Business.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,6 +1,6 @@
 ﻿using ClassManager.Business.Enums;
 
-namespace ClassManager.Business.Entidades
+namespace ClassManager.Business.Entities
 {
     public class Usuario : BaseEntity
     {
