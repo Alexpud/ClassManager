@@ -1,7 +1,7 @@
-# O que �
+# O que e
 
-Projeto simples para praticar boas pr�ticas de arquitetura e desenvolvimento de software projetando
-um simples sistema de gerenciamento de cursos, com autentica��o/autoriza��o, notificaca��;
+Projeto simples para praticar boas praticas de arquitetura e desenvolvimento de software projetando
+um simples sistema de gerenciamento de cursos, com autenticacao/autorizacao, notificacao;
 
 ## Os requisitos que temos até agora
 - Um usuário pode ser aluno, professor ou coordenador.
