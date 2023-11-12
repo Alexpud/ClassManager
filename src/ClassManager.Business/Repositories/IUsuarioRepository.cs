@@ -5,5 +5,4 @@ namespace ClassManager.Business.Repositories;
 
 public interface IUsuarioRepository : IBaseRepository<Usuario>
 {
-
 }

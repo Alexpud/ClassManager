@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClassManager.Data.Repositories;
 
-public abstract class BaseRepository<TEntity>  : IBaseRepository<TEntity>  where TEntity : BaseEntity
+public abstract class BaseRepository<TEntity>  : IBaseRepository<TEntity>  where TEntity : BaseEntity, new()
 {
     private readonly ClassManagerDbContext _dbContext;
     private DbSet<TEntity> _set;
@@ -23,6 +23,9 @@ public abstract class BaseRepository<TEntity>  : IBaseRepository<TEntity>  where
 
     public async Task<IEnumerable<TEntity>> ObterTodos()
         => await _set.ToListAsync();
+
+    public void Remover(Guid id)
+        => _set.Remove(new TEntity{Id = id});
 
     public async Task SaveChanges()
         => await _dbContext.SaveChangesAsync();

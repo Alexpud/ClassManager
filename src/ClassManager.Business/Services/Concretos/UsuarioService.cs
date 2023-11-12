@@ -47,4 +47,10 @@ public class UsuarioService : BaseService, IUsuarioService
 
     public async Task<IEnumerable<Usuario>> ObterTodos()
         => await _usuarioRepository.ObterTodos();
+
+    public async Task Remover(Guid id)
+    {
+        _usuarioRepository.Remover(id);
+        await _usuarioRepository.SaveChanges();
+    }
 }
