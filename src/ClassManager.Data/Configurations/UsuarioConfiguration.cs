@@ -14,6 +14,7 @@ namespace ClassManager.Data.Configurations
             builder.Property(p => p.Tipo).IsRequired().HasConversion<string>();
             builder.Property(p => p.Login).IsRequired().HasMaxLength(100);
             builder.Property(p => p.Senha).IsRequired().HasMaxLength(255);
+            builder.Property(p => p.CriadoEm).IsRequired().HasDefaultValueSql("GETDATE()");
         }
     }
 }

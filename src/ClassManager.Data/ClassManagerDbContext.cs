@@ -6,7 +6,7 @@ namespace ClassManager.Data
 {
     public class ClassManagerDbContext : DbContext
     {
-        public DbSet<Usuario> Usuarios;
+        public DbSet<Usuario>? Usuarios;
 
         public ClassManagerDbContext(DbContextOptions options) : base(options) { }
 

@@ -15,23 +15,15 @@ public abstract class BaseRepository<TEntity>  : IBaseRepository<TEntity>  where
         _set = dbContext.Set<TEntity>();
     }
 
-    public TEntity Adicionar(TEntity entidade)
-    {
-        throw new NotImplementedException();
-    }
+    public void Adicionar(TEntity entidade) 
+        => _set.Add(entidade);
 
-    public Task<TEntity> ObterPorId(Guid id)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<TEntity?> ObterPorId(Guid id)
+        => await _set.FindAsync(id);
 
-    public Task<IEnumerable<TEntity>> ObterTodos()
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<IEnumerable<TEntity>> ObterTodos()
+        => await _set.ToListAsync();
 
-    public Task SaveChanges()
-    {
-        throw new NotImplementedException();
-    }
+    public async Task SaveChanges()
+        => await _dbContext.SaveChangesAsync();
 }

@@ -20,7 +20,9 @@ namespace ClassManager.Data.Migrations
                     SobreNome = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Login = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Senha = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CriadoEm = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    UltimaAtualizacao = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {

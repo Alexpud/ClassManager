@@ -9,5 +9,7 @@ namespace ClassManager.Business.Entities
         public string? Login { get; set; }
         public string? Senha { get; set; }
         public TipoUsuario Tipo { get; set; }
+        public DateTime CriadoEm { get; set; }
+        public DateTime? UltimaAtualizacao { get; set; }
     }
 }

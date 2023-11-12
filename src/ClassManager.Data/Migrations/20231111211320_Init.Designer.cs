@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClassManager.Data.Migrations
 {
     [DbContext(typeof(ClassManagerDbContext))]
-    [Migration("20231110194427_Init")]
+    [Migration("20231111211320_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -25,11 +25,16 @@ namespace ClassManager.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ClassManager.Business.Entidades.Usuario", b =>
+            modelBuilder.Entity("ClassManager.Business.Entities.Usuario", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CriadoEm")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("Login")
                         .IsRequired()
@@ -54,6 +59,9 @@ namespace ClassManager.Data.Migrations
                     b.Property<string>("Tipo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UltimaAtualizacao")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
