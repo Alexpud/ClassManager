@@ -12,14 +12,11 @@ namespace ClassManager.Api.Controllers;
 public class UsuariosController : BaseController
 {
     private readonly IUsuarioService _usuarioService;
-        private readonly IUsuarioRepository _usuarioRepository;
 
     public UsuariosController(
         IUsuarioService usuarioService, 
-        IUsuarioRepository usuarioRepository,
         INotificationServce notificationServce) : base(notificationServce) 
     {
-        _usuarioRepository = usuarioRepository;
         _usuarioService = usuarioService;
     }
 
@@ -47,7 +44,7 @@ public class UsuariosController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> ObterPorId(Guid id)
     {
-        var usuario = await _usuarioRepository.ObterPorId(id);
+        var usuario = await _usuarioService.ObterPorId(id);
         if (usuario == null)
             return NoContent();
 
@@ -61,7 +58,7 @@ public class UsuariosController : BaseController
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<Usuario>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> ObterTodos()
-        => Ok(await _usuarioRepository.ObterTodos());
+        => Ok(await _usuarioService.ObterTodos());
 
     /// <summary>
     /// Rmove um usuario pelo id
