@@ -1,17 +1,25 @@
+using System.Text;
 using System.Text.Json.Serialization;
 using ClassManager.Api.Configurations;
-using ClassManager.Data;
+using ClassManager.Business.Entities;
+using ClassManager.Business.Enums;
+using ClassManager.Data.Context;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 builder.Services.ResolveDependencies(builder.Configuration);
+
 builder.Services.AddControllers()
     .AddJsonOptions(options => 
     { 
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
-    });;
+    });
+
+builder.Services.ResolveIdentity(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -30,6 +38,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

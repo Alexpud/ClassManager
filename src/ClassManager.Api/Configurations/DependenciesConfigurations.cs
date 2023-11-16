@@ -1,15 +1,20 @@
 
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using ClassManager.Business.Entities.Validators;
 using ClassManager.Business.Notifications;
 using ClassManager.Business.Repositories;
 using ClassManager.Business.Services.Concretos;
 using ClassManager.Business.Services.Interfaces;
-using ClassManager.Data;
+using ClassManager.Data.Authentication;
+using ClassManager.Data.Context;
 using ClassManager.Data.Repositories;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ClassManager.Api.Configurations;
 
@@ -46,7 +51,8 @@ public static class DependenciesConfigurations
     {
         services
             .AddScoped<IUsuarioService, UsuarioService>()
-            .AddScoped<INotificationServce, NotificationService>();
+            .AddScoped<INotificationServce, NotificationService>()
+            .AddScoped<ILoginService, LoginService>();
     }
 
     private static void ConfigureSwagger(this IServiceCollection services)

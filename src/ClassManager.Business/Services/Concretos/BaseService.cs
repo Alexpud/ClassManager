@@ -12,7 +12,7 @@ public abstract class BaseService
         _notificationService = notificationServce;
     }
 
-    protected bool Validar<TEntity>(IValidator<TEntity> validator, TEntity entidade) where TEntity : BaseEntity
+    protected bool Validar<TEntity>(IValidator<TEntity> validator, TEntity entidade)
     {
         var validation = validator.Validate(entidade);
         if (validation.IsValid)
@@ -22,5 +22,12 @@ public abstract class BaseService
             _notificationService.Handle(error.ErrorMessage);
 
         return false;
+    }
+
+    protected void Notificar(IEnumerable<string> messages)
+    {
+        foreach(var message in messages)
+            _notificationService.Handle(message);
+
     }
 }

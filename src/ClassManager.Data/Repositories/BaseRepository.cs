@@ -1,5 +1,6 @@
 using ClassManager.Business.Entities;
 using ClassManager.Business.Repositories;
+using ClassManager.Data.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClassManager.Data.Repositories;

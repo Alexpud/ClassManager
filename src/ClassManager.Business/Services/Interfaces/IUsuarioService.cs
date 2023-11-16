@@ -5,8 +5,9 @@ namespace ClassManager.Business.Services.Interfaces;
 
 public interface IUsuarioService
 {
-    Task<Usuario?> Adicionar(UsuarioCriacaoDto usuario);
-    Task<Usuario?> ObterPorId(Guid id);
-    Task<IEnumerable<Usuario>> ObterTodos();
-    Task Remover(Guid id);
+    Task<Usuario?> Criar(UsuarioCriacaoDto usuario);
+    Task<string> Login(UsuarioLoginDto dto);
+    //Task<Usuario?> ObterPorId(Guid id);
+    //Task<IEnumerable<Usuario>> ObterTodos();
+    //Task Remover(Guid id);
 }
