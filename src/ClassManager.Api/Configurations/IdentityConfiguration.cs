@@ -1,4 +1,5 @@
 using System.Text;
+using ClassManager.Api.Identity;
 using ClassManager.Business.Entities;
 using ClassManager.Data.Context;
 using ClassManager.Data.Options;
@@ -22,6 +23,7 @@ public static class AuthenticationConfiguration
         services
             .AddIdentity<Usuario, IdentityRole<Guid>>()
             .AddRoles<IdentityRole<Guid>>()
+            .AddErrorDescriber<CustomIdentityErrors>()
             .AddEntityFrameworkStores<ClassManagerDbContext>()
             .AddDefaultTokenProviders();
     }

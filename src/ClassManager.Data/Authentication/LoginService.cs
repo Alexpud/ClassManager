@@ -24,10 +24,7 @@ namespace ClassManager.Data.Authentication
         public async Task<bool> CredenciaisSaoValidas(string username, string password)
         {
             var signinResult = await _siginManager.PasswordSignInAsync(username, password, isPersistent: false, lockoutOnFailure: false);
-            if (!signinResult.Succeeded)
-                return false;
-
-            return true;
+            return signinResult.Succeeded;
         }
 
         public async Task<string> GerarTokenAcesso(string userName)

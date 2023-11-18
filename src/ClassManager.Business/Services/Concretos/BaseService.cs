@@ -1,4 +1,3 @@
-using ClassManager.Business.Entities;
 using ClassManager.Business.Notifications;
 using FluentValidation;
 
@@ -28,6 +27,8 @@ public abstract class BaseService
     {
         foreach(var message in messages)
             _notificationService.Handle(message);
-
     }
+
+    protected void Notificar(string message)
+        => _notificationService.Handle(message);
 }

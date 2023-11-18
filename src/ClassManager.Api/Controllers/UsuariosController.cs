@@ -29,18 +29,13 @@ public class UsuariosController : BaseController
     [Authorize(Roles = "Coordenador")]
     [ProducesResponseType(typeof(Usuario), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(CustomProblemDetails), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> Criar(UsuarioCriacaoDto dto)
-    {
-        var usuarioCriado = await _usuarioService.Criar(dto);
-        return CustomResponse(usuarioCriado);
-    }
+    public async Task<IActionResult> Criar(UsuarioCriacaoDto dto) 
+        => CustomResponse(await _usuarioService.Criar(dto));
 
     [AllowAnonymous]
     [HttpPost("Login")]
-    public async Task<IActionResult> Login(UsuarioLoginDto dto)
-    {
-        return CustomResponse(await _usuarioService.Login(dto));
-    }
+    public async Task<IActionResult> Login(UsuarioLoginDto dto) 
+        => CustomResponse(await _usuarioService.Login(dto));
 
     /// <summary>
     /// Obtém informações resumidas de um usuário pelo id.

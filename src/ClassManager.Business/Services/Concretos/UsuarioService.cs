@@ -54,7 +54,10 @@ public class UsuarioService : BaseService, IUsuarioService
     public async Task<string> Login(UsuarioLoginDto dto)
     {
         if (!await _authenticationService.CredenciaisSaoValidas(dto.UserName, dto.Password))
+        {
+            Notificar("Login ou senha incorretas");
             return null;
+        }
 
         return await _authenticationService.GerarTokenAcesso(dto.UserName);
     }
