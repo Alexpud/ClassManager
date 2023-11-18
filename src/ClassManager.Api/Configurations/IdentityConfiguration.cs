@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ClassManager.Api.Configurations;
 
-public static class AuthenticationConfiguration
+public static class IdentityConfiguration
 {
     public static void ResolveIdentity(this IServiceCollection services, IConfiguration configuration)
     {
