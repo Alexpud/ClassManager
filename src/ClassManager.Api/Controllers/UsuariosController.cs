@@ -46,16 +46,16 @@ public class UsuariosController : BaseController
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id:guid}")]
-    [Authorize(Roles = "Coordenador")]
+    [Authorize(Policy = "Discentes")]
     [ProducesResponseType(typeof(Usuario), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> ObterPorId(Guid id)
     {
-        //var usuario = await _usuarioService.ObterPorId(id);
-        //if (usuario == null)
+        // var usuario = await _usuarioService.ObterPorId(id);
+        // if (usuario == null)
         //    return NoContent();
 
-        return Ok("Funcionou");
+        return Ok("usurario");
     }
 
     ///// <summary>

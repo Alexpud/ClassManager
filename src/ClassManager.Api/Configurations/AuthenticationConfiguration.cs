@@ -21,8 +21,8 @@ public static class AuthenticationConfiguration
     private static void ConfigureIdentity(IServiceCollection services)
     {
         services
-            .AddIdentity<Usuario, IdentityRole>()
-            .AddRoles<IdentityRole>()
+            .AddIdentity<Usuario, IdentityRole<Guid>>()
+            .AddRoles<IdentityRole<Guid>>()
             .AddEntityFrameworkStores<ClassManagerDbContext>()
             .AddDefaultTokenProviders();
     }
@@ -51,7 +51,7 @@ public static class AuthenticationConfiguration
         services.AddAuthorization(options =>
         {
             options.AddPolicy("Coordenador", policy => policy.RequireRole("Coordenador"));
-
+            options.AddPolicy("Discentes", policy => policy.RequireRole("Coordenador", "Professor"));
             options.AddPolicy("ProfessoresEAlunos", policy => policy.RequireRole("Usuario", "Professor"));
         });
     }

@@ -58,15 +58,15 @@ public class UsuarioService : BaseService, IUsuarioService
         return await _authenticationService.GerarTokenAcesso(dto.UserName);
     }
 
-    //public async Task<Usuario?> ObterPorId(Guid id)
-    //    => await _usuarioRepository.ObterPorId(id);
+    public async Task<Usuario?> ObterPorId(Guid id)
+       => await _usuarioRepository.ObterPorId(id);
 
-    //public async Task<IEnumerable<Usuario>> ObterTodos()
+    // public async Task<IEnumerable<Usuario>> ObterTodos()
     //    => await _usuarioRepository.ObterTodos();
 
-    //public async Task Remover(Guid id)
-    //{
+    // public async Task Remover(Guid id)
+    // {
     //    _usuarioRepository.Remover(id);
     //    await _usuarioRepository.SaveChanges();
-    //}
+    // }
 }

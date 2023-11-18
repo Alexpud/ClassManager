@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ClassManager.Business.Entities
 {
-    public class Usuario : IdentityUser
+    public class Usuario : IdentityUser<Guid>
     {
         public string? Nome { get; set; }
         public string? SobreNome { get; set; }

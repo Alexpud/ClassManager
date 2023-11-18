@@ -39,7 +39,7 @@ namespace ClassManager.Data.Authentication
             var claims = new Claim[]
             {
                 new Claim("username", usuario.UserName),
-                new Claim("id", usuario.Id),
+                new Claim("id", usuario.Id.ToString()),
                 new Claim(ClaimTypes.Role, usuario.Tipo.ToString()),
                 new Claim("loginTimestamp", DateTime.UtcNow.ToString())
             };
