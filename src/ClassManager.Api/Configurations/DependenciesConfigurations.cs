@@ -1,5 +1,3 @@
-
-using System.Reflection;
 using ClassManager.Business.Entities.Validators;
 using ClassManager.Business.Notifications;
 using ClassManager.Business.Profiles;
@@ -22,7 +20,6 @@ public static class DependenciesConfigurations
         ResolveValidators(services);
         ResolveServices(services);
         ResolveRepositories(services);
-        ConfigureSwagger(services);
         ConfigureDatabase(services, configuration);
         return services;
     }
@@ -36,7 +33,6 @@ public static class DependenciesConfigurations
     {
         services.AddDbContext<ClassManagerDbContext>(
             options => options.UseSqlServer(configuration.GetConnectionString("Default")));
-        
     }
 
     private static void ResolveValidators(IServiceCollection services)
@@ -55,14 +51,5 @@ public static class DependenciesConfigurations
             .AddScoped<IUsuarioService, UsuarioService>()
             .AddScoped<INotificationServce, NotificationService>()
             .AddScoped<ILoginService, LoginService>();
-    }
-
-    private static void ConfigureSwagger(this IServiceCollection services)
-    {
-        services.AddSwaggerGen(options => 
-        {
-            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-        });
     }
 }

@@ -14,8 +14,8 @@ public class UsuariosController : BaseController
     private readonly IUsuarioService _usuarioService;
 
     public UsuariosController(
-        IUsuarioService usuarioService, 
-        INotificationServce notificationServce) : base(notificationServce) 
+        IUsuarioService usuarioService,
+        INotificationServce notificationServce) : base(notificationServce)
     {
         _usuarioService = usuarioService;
     }
@@ -26,14 +26,16 @@ public class UsuariosController : BaseController
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
+    [Authorize(Roles = "Coordenador")]
     [ProducesResponseType(typeof(Usuario), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(CustomProblemDetails), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> Create(UsuarioCriacaoDto dto)
+    public async Task<IActionResult> Criar(UsuarioCriacaoDto dto)
     {
         var usuarioCriado = await _usuarioService.Criar(dto);
         return CustomResponse(usuarioCriado);
     }
 
+    [AllowAnonymous]
     [HttpPost("Login")]
     public async Task<IActionResult> Login(UsuarioLoginDto dto)
     {
@@ -53,7 +55,7 @@ public class UsuariosController : BaseController
     {
         var usuario = await _usuarioService.ObterDadosResumidosPorId(id);
         if (usuario == null)
-           return NoContent();
+            return NoContent();
 
         return Ok(usuario);
     }

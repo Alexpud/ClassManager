@@ -2,7 +2,6 @@ using System.Text;
 using ClassManager.Business.Entities;
 using ClassManager.Data.Context;
 using ClassManager.Data.Options;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
