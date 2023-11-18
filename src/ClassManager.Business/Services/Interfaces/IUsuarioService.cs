@@ -7,7 +7,7 @@ public interface IUsuarioService
 {
     Task<Usuario?> Criar(UsuarioCriacaoDto usuario);
     Task<string> Login(UsuarioLoginDto dto);
-    //Task<Usuario?> ObterPorId(Guid id);
-    //Task<IEnumerable<Usuario>> ObterTodos();
+    Task<UsuarioDto?> ObterDadosResumidosPorId(Guid id);
+    Task<IEnumerable<UsuarioDto>> ObterTodos();
     //Task Remover(Guid id);
 }

@@ -11,17 +11,15 @@ public class UsuarioRepository : IUsuarioRepository
 
     public UsuarioRepository(UserManager<Usuario> userManager)
     {
-        this._userManager = userManager;
+        _userManager = userManager;
     }
 
-    public async Task<IdentityResult> Adicionar(Usuario usuario, string password)
-    {
-        return await _userManager.CreateAsync(usuario, password);
-    }
+    public async Task<IdentityResult> Adicionar(Usuario usuario, string password) 
+        => await _userManager.CreateAsync(usuario, password);
 
-    public async Task<Usuario> ObterPorId(Guid id)
-    {
-        return await _userManager.Users.FirstOrDefaultAsync(p => p.Id == id);
-        throw new NotImplementedException();
-    }
+    public async Task<Usuario?> ObterPorId(Guid id) 
+        => await _userManager.Users.FirstOrDefaultAsync(p => p.Id == id);
+
+    public async Task<IEnumerable<Usuario>> ObterTodos() 
+        => await _userManager.Users.ToListAsync();
 }

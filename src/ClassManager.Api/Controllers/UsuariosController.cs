@@ -41,31 +41,31 @@ public class UsuariosController : BaseController
     }
 
     /// <summary>
-    /// Obtém um usuário pelo id.
+    /// Obtém informações resumidas de um usuário pelo id.
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:guid}/resumidos")]
     [Authorize(Policy = "Discentes")]
-    [ProducesResponseType(typeof(Usuario), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(UsuarioDto), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
-    public async Task<IActionResult> ObterPorId(Guid id)
+    public async Task<IActionResult> ObterDadosResumidosPorId(Guid id)
     {
-        // var usuario = await _usuarioService.ObterPorId(id);
-        // if (usuario == null)
-        //    return NoContent();
+        var usuario = await _usuarioService.ObterDadosResumidosPorId(id);
+        if (usuario == null)
+           return NoContent();
 
-        return Ok("usurario");
+        return Ok(usuario);
     }
 
-    ///// <summary>
-    ///// Obtém todos os registros de usuarios
-    ///// </summary>
-    ///// <returns></returns>
-    //[HttpGet]
-    //[ProducesResponseType(typeof(IEnumerable<Usuario>), (int)HttpStatusCode.OK)]
-    //public async Task<IActionResult> ObterTodos()
-    //    => Ok(await _usuarioService.ObterTodos());
+    /// <summary>
+    /// Obtém todos os registros de usuarios com informacoes resumidas
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("resumidos")]
+    [ProducesResponseType(typeof(IEnumerable<UsuarioDto>), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> ObterTodos()
+       => Ok(await _usuarioService.ObterTodos());
 
     ///// <summary>
     ///// Rmove um usuario pelo id

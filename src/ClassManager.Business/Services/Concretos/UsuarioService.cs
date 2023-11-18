@@ -1,7 +1,6 @@
 using AutoMapper;
 using ClassManager.Business.Dtos;
 using ClassManager.Business.Entities;
-using ClassManager.Business.Entities.Validators;
 using ClassManager.Business.Notifications;
 using ClassManager.Business.Repositories;
 using ClassManager.Business.Services.Interfaces;
@@ -12,6 +11,7 @@ namespace ClassManager.Business.Services.Concretos;
 public class UsuarioService : BaseService, IUsuarioService
 {
     private readonly IUsuarioRepository _usuarioRepository;
+    private readonly IMapper _mapper;
     private readonly IValidator<Usuario> _usuarioValidator;
     private readonly ILoginService _authenticationService;
 
@@ -19,11 +19,13 @@ public class UsuarioService : BaseService, IUsuarioService
         IUsuarioRepository usuarioRepository, 
         IValidator<Usuario> usuarioValidator, 
         INotificationServce notificationServce,
-        ILoginService authenticationService) : base(notificationServce)
+        ILoginService authenticationService,
+        IMapper mapper) : base(notificationServce)
     {
         _usuarioValidator = usuarioValidator;
-        this._authenticationService = authenticationService;
+        _authenticationService = authenticationService;
         _usuarioRepository = usuarioRepository;
+        _mapper = mapper;
     }
 
     public async Task<Usuario?> Criar(UsuarioCriacaoDto dto)
@@ -51,18 +53,28 @@ public class UsuarioService : BaseService, IUsuarioService
 
     public async Task<string> Login(UsuarioLoginDto dto)
     {
-        // Autenticar o usuario com o usuario e senha
         if (!await _authenticationService.CredenciaisSaoValidas(dto.UserName, dto.Password))
             return null;
 
         return await _authenticationService.GerarTokenAcesso(dto.UserName);
     }
 
-    public async Task<Usuario?> ObterPorId(Guid id)
-       => await _usuarioRepository.ObterPorId(id);
+    public async Task<UsuarioDto?> ObterDadosResumidosPorId(Guid id)
+    {
+        var usuario = await _usuarioRepository.ObterPorId(id);
+        if (usuario == null)
+            return null;
+        return _mapper.Map<UsuarioDto>(usuario);
+    }
 
-    // public async Task<IEnumerable<Usuario>> ObterTodos()
-    //    => await _usuarioRepository.ObterTodos();
+    public async Task<IEnumerable<UsuarioDto>> ObterTodos()
+    {
+        var usuarios = await _usuarioRepository.ObterTodos();
+        if (!usuarios.Any())
+            return Enumerable.Empty<UsuarioDto>();
+
+        return _mapper.Map<IEnumerable<UsuarioDto>>(usuarios);
+    }
 
     // public async Task Remover(Guid id)
     // {
