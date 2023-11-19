@@ -32,11 +32,6 @@ public class UsuariosController : BaseController
     public async Task<IActionResult> Criar(UsuarioCriacaoDto dto) 
         => CustomResponse(await _usuarioService.Criar(dto));
 
-    [AllowAnonymous]
-    [HttpPost("Login")]
-    public async Task<IActionResult> Login(UsuarioLoginDto dto) 
-        => CustomResponse(await _usuarioService.Login(dto));
-
     /// <summary>
     /// Obtém informações resumidas de um usuário pelo id.
     /// </summary>
@@ -60,6 +55,7 @@ public class UsuariosController : BaseController
     /// </summary>
     /// <returns></returns>
     [HttpGet("resumidos")]
+    [Authorize(Roles = "Coordenador")]
     [ProducesResponseType(typeof(IEnumerable<UsuarioDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> ObterTodos()
        => Ok(await _usuarioService.ObterTodos());

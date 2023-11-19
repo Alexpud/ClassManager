@@ -13,17 +13,14 @@ public class UsuarioService : BaseService, IUsuarioService
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IMapper _mapper;
     private readonly IValidator<Usuario> _usuarioValidator;
-    private readonly ILoginService _authenticationService;
 
     public UsuarioService(
         IUsuarioRepository usuarioRepository, 
         IValidator<Usuario> usuarioValidator, 
         INotificationServce notificationServce,
-        ILoginService authenticationService,
         IMapper mapper) : base(notificationServce)
     {
         _usuarioValidator = usuarioValidator;
-        _authenticationService = authenticationService;
         _usuarioRepository = usuarioRepository;
         _mapper = mapper;
     }
@@ -49,17 +46,6 @@ public class UsuarioService : BaseService, IUsuarioService
         }
 
         return usuario;
-    }
-
-    public async Task<string> Login(UsuarioLoginDto dto)
-    {
-        if (!await _authenticationService.CredenciaisSaoValidas(dto.UserName, dto.Password))
-        {
-            Notificar("Login ou senha incorretas");
-            return null;
-        }
-
-        return await _authenticationService.GerarTokenAcesso(dto.UserName);
     }
 
     public async Task<UsuarioDto?> ObterDadosResumidosPorId(Guid id)

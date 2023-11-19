@@ -50,6 +50,6 @@ public static class DependenciesConfigurations
         services
             .AddScoped<IUsuarioService, UsuarioService>()
             .AddScoped<INotificationServce, NotificationService>()
-            .AddScoped<ILoginService, LoginService>();
+            .AddScoped<IIdentityService, IdentityService>();
     }
 }
