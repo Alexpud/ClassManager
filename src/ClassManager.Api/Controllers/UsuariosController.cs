@@ -1,4 +1,5 @@
 using System.Net;
+using Asp.Versioning;
 using ClassManager.Business.Authentication;
 using ClassManager.Business.Dtos.Usuario;
 using ClassManager.Business.Entities;
@@ -9,11 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Controllers;
 
+[ApiVersion("2.0")]
 [Route("api/[controller]")]
 public class UsuariosController : BaseController
 {
     private readonly IUsuarioService _usuarioService;
-    private readonly IUser user;
+    private readonly IUser _user;
 
     public UsuariosController(
         IUsuarioService usuarioService,
@@ -21,7 +23,7 @@ public class UsuariosController : BaseController
         IUser user) : base(notificationServce)
     {
         _usuarioService = usuarioService;
-        this.user = user;
+        this._user = user;
     }
 
     /// <summary>
@@ -47,7 +49,7 @@ public class UsuariosController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> ObterDadosResumidosPorId(Guid id)
     {
-        user.GetUserId();
+        _user.GetUserId();
         var usuario = await _usuarioService.ObterDadosResumidosPorId(id);
         if (usuario == null)
             return NoContent();

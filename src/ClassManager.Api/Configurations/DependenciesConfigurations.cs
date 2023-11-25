@@ -1,3 +1,5 @@
+using Asp.Versioning;
+using ClassManager.Api.Configurations.Swagger;
 using ClassManager.Api.Identity;
 using ClassManager.Business.Authentication;
 using ClassManager.Business.Entities.Validators;
@@ -11,20 +13,43 @@ using ClassManager.Data.Context;
 using ClassManager.Data.Repositories;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ClassManager.Api.Configurations;
 
 public static class DependenciesConfigurations
 {
-    public static IServiceCollection ResolveDependencies(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureApi(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IUser, AspNetUser>();
+        services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+        ConfigureApiVersioning(services);
         ResolveAutoMapper(services);
         ResolveValidators(services);
         ResolveServices(services);
         ResolveRepositories(services);
         ConfigureDatabase(services, configuration);
         return services;
+    }
+
+    private static void ConfigureApiVersioning(IServiceCollection services)
+    {
+        services.AddApiVersioning(opt =>
+        {
+            opt.DefaultApiVersion = new ApiVersion(1, 0);
+            opt.AssumeDefaultVersionWhenUnspecified = true;
+            opt.ReportApiVersions = true;
+            opt.ApiVersionReader = ApiVersionReader.Combine(
+                new UrlSegmentApiVersionReader(),
+                new HeaderApiVersionReader("api-version"),
+                new MediaTypeApiVersionReader("api-version"));
+        }).AddApiExplorer(options =>
+        {
+            options.GroupNameFormat = "'v'VVV";
+
+            options.SubstituteApiVersionInUrl = true;
+        });
     }
 
     private static void ResolveAutoMapper(IServiceCollection services)
