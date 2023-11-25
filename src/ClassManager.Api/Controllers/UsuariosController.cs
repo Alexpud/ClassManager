@@ -1,5 +1,6 @@
 using System.Net;
-using ClassManager.Business.Dtos;
+using ClassManager.Business.Authentication;
+using ClassManager.Business.Dtos.Usuario;
 using ClassManager.Business.Entities;
 using ClassManager.Business.Notifications;
 using ClassManager.Business.Services.Interfaces;
@@ -12,12 +13,15 @@ namespace ClassManager.Api.Controllers;
 public class UsuariosController : BaseController
 {
     private readonly IUsuarioService _usuarioService;
+    private readonly IUser user;
 
     public UsuariosController(
         IUsuarioService usuarioService,
-        INotificationServce notificationServce) : base(notificationServce)
+        INotificationServce notificationServce,
+        IUser user) : base(notificationServce)
     {
         _usuarioService = usuarioService;
+        this.user = user;
     }
 
     /// <summary>
@@ -43,6 +47,7 @@ public class UsuariosController : BaseController
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     public async Task<IActionResult> ObterDadosResumidosPorId(Guid id)
     {
+        user.GetUserId();
         var usuario = await _usuarioService.ObterDadosResumidosPorId(id);
         if (usuario == null)
             return NoContent();
@@ -55,20 +60,8 @@ public class UsuariosController : BaseController
     /// </summary>
     /// <returns></returns>
     [HttpGet("resumidos")]
-    [Authorize(Roles = "Coordenador")]
+    [Authorize(Policy = "Discentes")]
     [ProducesResponseType(typeof(IEnumerable<UsuarioDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> ObterTodos()
        => Ok(await _usuarioService.ObterTodos());
-
-    ///// <summary>
-    ///// Rmove um usuario pelo id
-    ///// </summary>
-    ///// <param name="id"></param>
-    ///// <returns></returns>
-    //[HttpDelete("{id:guid}")]
-    //public async Task<IActionResult> Deletar(Guid id)
-    //{
-    //    await _usuarioService.Remover(id);
-    //    return Ok();
-    //}
 }

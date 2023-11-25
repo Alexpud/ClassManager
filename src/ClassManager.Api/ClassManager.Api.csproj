@@ -28,10 +28,5 @@
   <ItemGroup>
     <ProjectReference Include="..\ClassManager.Data\ClassManager.Data.csproj" />
   </ItemGroup>
-  
-
-  <ItemGroup>
-    <Folder Include="Authorization\" />
-  </ItemGroup>
 
 </Project>

@@ -16,14 +16,14 @@ public abstract class BaseController : ControllerBase
         _notificationService = notificationService;
     }
 
-    protected IActionResult CustomResponse(object? data)
+    protected IActionResult CustomResponse(object? data = null)
     {
         if (_notificationService.TemNotificacoes())
             return BadRequest(new CustomProblemDetails(
                 (int)HttpStatusCode.BadRequest,
                 _notificationService.ObterNotificacoes().Select(p => p.Mensagem)));
 
-        return Ok(data);
+        return data is null ? NoContent() : Ok(data);
     }
 }
 

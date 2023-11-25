@@ -1,6 +1,6 @@
-﻿namespace ClassManager.Business.Dtos
+﻿namespace ClassManager.Business.Dtos.Authentication
 {
-    public class UsuarioLoginDto
+    public class LoginDto
     {
         public string UserName { get; set; }
         public string Password { get; set; }

@@ -21,4 +21,13 @@ public class CustomIdentityErrors : IdentityErrorDescriber
             Description = $"O username {userName} é invalido"
         };
     }
+
+    public override IdentityError DuplicateRoleName(string role)
+    {
+        return new IdentityError
+        {
+            Code = "DuplicateRoleName",
+            Description = $"O role {role} já existe"
+        };
+    }
 }

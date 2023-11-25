@@ -27,6 +27,7 @@ using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<ClassManagerDbContext>();
 dbContext.Database.Migrate();
 
+app.UseHsts();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

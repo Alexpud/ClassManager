@@ -1,5 +1,5 @@
 using AutoMapper;
-using ClassManager.Business.Dtos;
+using ClassManager.Business.Dtos.Usuario;
 using ClassManager.Business.Entities;
 using ClassManager.Business.Notifications;
 using ClassManager.Business.Repositories;

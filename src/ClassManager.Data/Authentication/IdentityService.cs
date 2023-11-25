@@ -1,4 +1,4 @@
-﻿using ClassManager.Business.Dtos;
+﻿using ClassManager.Business.Dtos.Authentication;
 using ClassManager.Business.Entities;
 using ClassManager.Business.Notifications;
 using ClassManager.Business.Services.Concretos;
@@ -16,22 +16,33 @@ namespace ClassManager.Data.Authentication;
 public class IdentityService : BaseService, IIdentityService
 {
     private readonly SignInManager<Usuario> _siginManager;
+    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
     private readonly AuthenticationSettings _settings;
-    public IdentityService(SignInManager<Usuario> siginManager, IOptions<AuthenticationSettings> options, INotificationServce notificationServce) : base(notificationServce)
+    public IdentityService(
+        SignInManager<Usuario> siginManager,
+        IOptions<AuthenticationSettings> options,
+        RoleManager<IdentityRole<Guid>> roleManager,
+        INotificationServce notificationServce) : base(notificationServce)
     {
         _siginManager = siginManager;
+        _roleManager = roleManager;
         _settings = options.Value;
     }
 
-    public async Task<string> Login(UsuarioLoginDto dto)
+    public async Task<LoginResponseDto> Login(LoginDto dto)
     {
+
         if (!await CredenciaisSaoValidas(dto.UserName, dto.Password))
         {
             Notificar("Login ou senha incorretas");
             return null;
         }
 
-        return await GerarTokenAcesso(dto.UserName);
+        var tokenJwt = await GerarTokenAcesso(dto.UserName);
+        return new LoginResponseDto
+        {
+            Token = tokenJwt,
+        };
     }
 
     private async Task<bool> CredenciaisSaoValidas(string username, string password)
@@ -43,15 +54,12 @@ public class IdentityService : BaseService, IIdentityService
     private async Task<string> GerarTokenAcesso(string userName)
     {
         var usuario = await _siginManager.UserManager.Users.FirstOrDefaultAsync(user => user.UserName == userName);
-        if (usuario == null)
-            return null;
-
         var claims = new Claim[]
         {
-                new Claim("username", usuario.UserName),
-                new Claim("id", usuario.Id.ToString()),
-                new Claim(ClaimTypes.Role, usuario.Tipo.ToString()),
-                new Claim("loginTimestamp", DateTime.UtcNow.ToString())
+            new Claim("username", usuario.UserName),
+            new Claim(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
+            new Claim(ClaimTypes.Role, usuario.Tipo.ToString()),
+            new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString())
         };
 
         var chave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Secret));
@@ -66,6 +74,13 @@ public class IdentityService : BaseService, IIdentityService
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public async Task CriarRole(string nome)
+    {
+        var identityResult = await _roleManager.CreateAsync(new IdentityRole<Guid>(nome));
+        if (!identityResult.Succeeded)
+            Notificar(identityResult.Errors.Select(p => p.Description));
     }
 
 }

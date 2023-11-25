@@ -1,8 +1,9 @@
-﻿using ClassManager.Business.Dtos;
+﻿using ClassManager.Business.Dtos.Authentication;
 
 namespace ClassManager.Data.Authentication;
 
 public interface IIdentityService
 {
-    Task<string?> Login(UsuarioLoginDto dto);
+    Task CriarRole(string nome);
+    Task<LoginResponseDto> Login(LoginDto dto);
 }

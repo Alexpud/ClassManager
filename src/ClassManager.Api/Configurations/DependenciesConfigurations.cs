@@ -1,3 +1,5 @@
+using ClassManager.Api.Identity;
+using ClassManager.Business.Authentication;
 using ClassManager.Business.Entities.Validators;
 using ClassManager.Business.Notifications;
 using ClassManager.Business.Profiles;
@@ -16,6 +18,7 @@ public static class DependenciesConfigurations
 {
     public static IServiceCollection ResolveDependencies(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IUser, AspNetUser>();
         ResolveAutoMapper(services);
         ResolveValidators(services);
         ResolveServices(services);
@@ -43,6 +46,7 @@ public static class DependenciesConfigurations
     private static void ResolveRepositories(IServiceCollection services)
     {
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+        
     }
 
     private static void ResolveServices(IServiceCollection services)

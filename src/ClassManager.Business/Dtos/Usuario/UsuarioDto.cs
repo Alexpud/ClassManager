@@ -1,6 +1,6 @@
 using ClassManager.Business.Enums;
 
-namespace ClassManager.Business.Dtos;
+namespace ClassManager.Business.Dtos.Usuario;
 
 public class UsuarioDto
 {
