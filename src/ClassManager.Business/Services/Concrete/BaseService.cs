@@ -1,7 +1,7 @@
 using ClassManager.Business.Notifications;
 using FluentValidation;
 
-namespace ClassManager.Business.Services.Concretos;
+namespace ClassManager.Business.Services.Concrete;
 
 public abstract class BaseService
 {

@@ -3,7 +3,7 @@ using ClassManager.Business.Authentication;
 using ClassManager.Business.Dtos.Usuario;
 using ClassManager.Business.Entities;
 using ClassManager.Business.Notifications;
-using ClassManager.Business.Services.Interfaces;
+using ClassManager.Business.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

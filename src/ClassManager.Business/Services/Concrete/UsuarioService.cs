@@ -3,10 +3,10 @@ using ClassManager.Business.Dtos.Usuario;
 using ClassManager.Business.Entities;
 using ClassManager.Business.Notifications;
 using ClassManager.Business.Repositories;
-using ClassManager.Business.Services.Interfaces;
+using ClassManager.Business.Services.Abstract;
 using FluentValidation;
 
-namespace ClassManager.Business.Services.Concretos;
+namespace ClassManager.Business.Services.Concrete;
 
 public class UsuarioService : BaseService, IUsuarioService
 {
