@@ -1,5 +1,7 @@
 using Asp.Versioning.ApiExplorer;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 
 namespace ClassManager.Api.Configurations.Swagger;
@@ -8,6 +10,7 @@ public static class SwaggerConfiguration
 {
     public static IServiceCollection ConfigureSwagger(this IServiceCollection services)
     {
+        services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
         services.AddSwaggerGen(options =>
         {
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

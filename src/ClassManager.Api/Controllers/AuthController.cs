@@ -32,6 +32,7 @@ public class AuthController : BaseController
     /// <param name="roleName"></param>
     /// <returns></returns>
     [HttpPost("api/roles")]
+    [Authorize(Roles = "Coordenador")]
     public async Task<IActionResult> CreateRole(RoleCreateDto dto)
     {
         await _identityService.CriarRole(dto.Nome.ToString());

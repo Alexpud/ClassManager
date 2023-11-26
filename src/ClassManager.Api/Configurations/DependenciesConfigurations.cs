@@ -23,7 +23,6 @@ public static class DependenciesConfigurations
     public static IServiceCollection ConfigureApi(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IUser, AspNetUser>();
-        services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
         ConfigureApiVersioning(services);
         ResolveAutoMapper(services);
         ResolveValidators(services);
