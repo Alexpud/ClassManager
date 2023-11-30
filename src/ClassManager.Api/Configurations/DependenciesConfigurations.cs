@@ -1,5 +1,4 @@
 using Asp.Versioning;
-using ClassManager.Api.Configurations.Swagger;
 using ClassManager.Api.Identity;
 using ClassManager.Business.Authentication;
 using ClassManager.Business.Entities.Validators;
@@ -13,8 +12,6 @@ using ClassManager.Data.Context;
 using ClassManager.Data.Repositories;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ClassManager.Api.Configurations;
 
@@ -70,7 +67,6 @@ public static class DependenciesConfigurations
     private static void ResolveRepositories(IServiceCollection services)
     {
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-        
     }
 
     private static void ResolveServices(IServiceCollection services)

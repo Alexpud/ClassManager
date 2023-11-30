@@ -47,15 +47,8 @@ public class UsuariosController : BaseController
     [Authorize(Policy = "Discentes")]
     [ProducesResponseType(typeof(UsuarioDto), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
-    public async Task<IActionResult> ObterDadosResumidosPorId(Guid id)
-    {
-        _user.GetUserId();
-        var usuario = await _usuarioService.ObterDadosResumidosPorId(id);
-        if (usuario == null)
-            return NoContent();
-
-        return Ok(usuario);
-    }
+    public async Task<IActionResult> ObterDadosResumidosPorId(Guid id) 
+        => CustomResponse(await _usuarioService.ObterDadosResumidosPorId(id));
 
     /// <summary>
     /// Obtém todos os registros de usuarios com informacoes resumidas
