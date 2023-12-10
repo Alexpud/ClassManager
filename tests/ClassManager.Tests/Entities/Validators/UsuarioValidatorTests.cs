@@ -2,7 +2,7 @@ using ClassManager.Business.Entities;
 using ClassManager.Business.Entities.Validators;
 using FluentValidation.TestHelper;
 
-namespace ClassManager.Tests.Business.Entities.Validators;
+namespace ClassManager.Business.Tests.Entities.Validators;
 
 public class UsuarioValidatorTests
 {

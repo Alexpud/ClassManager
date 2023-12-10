@@ -1,7 +1,7 @@
 using AutoMapper;
 using ClassManager.Business.Profiles;
 
-namespace ClassManager.Tests.Business.Profiles;
+namespace ClassManager.Business.Tests.Profiles;
 
 
 public class UsuarioProfileTests
