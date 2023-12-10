@@ -1,6 +1,6 @@
 using ClassManager.Business.Entities;
 
-namespace ClassManager.Business.Repositories;
+namespace ClassManager.Business.Interfaces.Repositories;
 
 public interface IBaseRepository<TEntity> where TEntity : BaseEntity
 {

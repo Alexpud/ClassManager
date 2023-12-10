@@ -1,7 +1,7 @@
 using ClassManager.Business.Dtos.Usuario;
 using ClassManager.Business.Entities;
 
-namespace ClassManager.Business.Services.Abstract;
+namespace ClassManager.Business.Interfaces.Services;
 
 public interface IUsuarioService
 {

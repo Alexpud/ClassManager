@@ -1,5 +1,5 @@
 using ClassManager.Business.Entities;
-using ClassManager.Business.Repositories;
+using ClassManager.Business.Interfaces.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,8 +1,7 @@
-
 using ClassManager.Business.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace ClassManager.Business.Repositories;
+namespace ClassManager.Business.Interfaces.Repositories;
 
 public interface IUsuarioRepository
 {

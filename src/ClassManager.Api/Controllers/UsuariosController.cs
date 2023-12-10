@@ -3,8 +3,8 @@ using Asp.Versioning;
 using ClassManager.Business.Authentication;
 using ClassManager.Business.Dtos.Usuario;
 using ClassManager.Business.Entities;
+using ClassManager.Business.Interfaces.Services;
 using ClassManager.Business.Notifications;
-using ClassManager.Business.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
