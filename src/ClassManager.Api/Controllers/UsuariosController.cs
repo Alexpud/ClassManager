@@ -1,5 +1,4 @@
 using System.Net;
-using Asp.Versioning;
 using ClassManager.Business.Authentication;
 using ClassManager.Business.Dtos.Usuario;
 using ClassManager.Business.Entities;
@@ -10,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Controllers;
 
-[ApiVersion("2.0")]
 [Route("api/[controller]")]
 public class UsuariosController : BaseController
 {

@@ -41,6 +41,11 @@ namespace ClassManager.Data.Migrations
                     b.Property<Guid>("ProfessorId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Tags")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<DateTime?>("UltimaAtualizacao")
                         .HasColumnType("datetime2");
 
@@ -49,21 +54,6 @@ namespace ClassManager.Data.Migrations
                     b.HasIndex("ProfessorId");
 
                     b.ToTable("Cursos");
-                });
-
-            modelBuilder.Entity("ClassManager.Business.Entities.Tag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("ClassManager.Business.Entities.Usuario", b =>
@@ -152,21 +142,6 @@ namespace ClassManager.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("CursoTag", b =>
-                {
-                    b.Property<Guid>("CursosComATagId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TagsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CursosComATagId", "TagsId");
-
-                    b.HasIndex("TagsId");
-
-                    b.ToTable("CursoTag");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -309,21 +284,6 @@ namespace ClassManager.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Professor");
-                });
-
-            modelBuilder.Entity("CursoTag", b =>
-                {
-                    b.HasOne("ClassManager.Business.Entities.Curso", null)
-                        .WithMany()
-                        .HasForeignKey("CursosComATagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ClassManager.Business.Entities.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
