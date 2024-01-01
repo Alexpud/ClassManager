@@ -1,6 +1,7 @@
+using ClassManager.Business.Entities;
 using FluentValidation;
 
-namespace ClassManager.Business.Entities.Validators;
+namespace ClassManager.Business.Validators.Entities;
 
 public class UsuarioValidator : AbstractValidator<Usuario>
 {

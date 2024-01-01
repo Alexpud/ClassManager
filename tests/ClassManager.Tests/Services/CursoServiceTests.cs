@@ -4,6 +4,8 @@ using ClassManager.Business.Enums;
 using ClassManager.Business.Interfaces.Repositories;
 using ClassManager.Business.Notifications;
 using ClassManager.Business.Services;
+using FluentValidation;
+using FluentValidation.Results;
 using NSubstitute;
 using NSubstitute.ReceivedExtensions;
 using NSubstitute.ReturnsExtensions;
@@ -15,19 +17,25 @@ public class CursoServiceTests
     private readonly CursoService _sut;
     private readonly INotificationServce _notificationService;
     private readonly IUsuarioRepository _usuarioRepository;
+    private readonly IValidator<CriarCursoDto> _criarCursoDtoValidator;
     public CursoServiceTests()
     {
         _notificationService = Substitute.For<INotificationServce>();
         _usuarioRepository = Substitute.For<IUsuarioRepository>();
-        _sut = new CursoService(_notificationService, _usuarioRepository);
+        _criarCursoDtoValidator = Substitute.For<IValidator<CriarCursoDto>>();
+        _sut = new CursoService(_notificationService, _usuarioRepository, _criarCursoDtoValidator);
     }
 
-    [Fact(DisplayName = "Criar Curso sem Professor deve falhar")]
+    [Fact(DisplayName = "Criar Curso com dados inválidos deve falhar")]
     [Trait("Categoria", "Curso")]
-    public async Task CriarCurso_SemProfessor_DeveFalhar()
+    public async Task CriarCurso_DadosInvalidos_DeveFalhar()
     {
         // Arrange
-        
+        _criarCursoDtoValidator.Validate(Arg.Any<CriarCursoDto>()).Returns(new ValidationResult
+        {
+            Errors = new List<ValidationFailure>()
+        });
+
         //  Act
         await _sut.CriarCurso(new CriarCursoDto());
 
@@ -44,6 +52,10 @@ public class CursoServiceTests
         {
             ProfessorId = Guid.NewGuid(),
         };
+
+        _criarCursoDtoValidator.Validate(Arg.Any<CriarCursoDto>())
+            .Returns(new ValidationResult());
+
         _usuarioRepository.ObterPorId(dto.ProfessorId)
             .ReturnsNull();
         // Act
@@ -62,6 +74,9 @@ public class CursoServiceTests
         {
             ProfessorId = Guid.NewGuid(),
         };
+        _criarCursoDtoValidator.Validate(Arg.Any<CriarCursoDto>())
+            .Returns(new ValidationResult());
+        
         _usuarioRepository.ObterPorId(dto.ProfessorId)
             .Returns(new Usuario()
             {

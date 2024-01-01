@@ -16,7 +16,7 @@ public abstract class BaseService
         var validation = validator.Validate(entidade);
         if (validation.IsValid)
             return true;
-
+            
         foreach (var error in validation.Errors)
             _notificationService.Handle(error.ErrorMessage);
 
