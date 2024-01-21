@@ -28,6 +28,12 @@ public class CursoService : BaseService
         _mapper = mapper;
     }
 
+    public async Task<List<CursoDto>> ObterTodos()
+    {
+        var cursos = await _cursoRepository.ObterTodos();
+        return _mapper.Map<List<CursoDto>>(cursos);
+    }
+
     public async Task<CursoDto> CriarCurso(CriarCursoDto dto)
     {
         if (!Validar(_criarCursoDtoValidator, dto))
