@@ -1,12 +1,12 @@
 using AutoMapper;
 using ClassManager.Business.Dtos.Usuario;
 using ClassManager.Business.Entities;
+using ClassManager.Business.Interfaces.Repositories;
+using ClassManager.Business.Interfaces.Services;
 using ClassManager.Business.Notifications;
-using ClassManager.Business.Repositories;
-using ClassManager.Business.Services.Abstract;
 using FluentValidation;
 
-namespace ClassManager.Business.Services.Concrete;
+namespace ClassManager.Business.Services;
 
 public class UsuarioService : BaseService, IUsuarioService
 {
@@ -15,8 +15,8 @@ public class UsuarioService : BaseService, IUsuarioService
     private readonly IValidator<Usuario> _usuarioValidator;
 
     public UsuarioService(
-        IUsuarioRepository usuarioRepository, 
-        IValidator<Usuario> usuarioValidator, 
+        IUsuarioRepository usuarioRepository,
+        IValidator<Usuario> usuarioValidator,
         INotificationServce notificationServce,
         IMapper mapper) : base(notificationServce)
     {

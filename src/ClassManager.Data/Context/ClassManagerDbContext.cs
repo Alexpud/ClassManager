@@ -8,6 +8,7 @@ namespace ClassManager.Data.Context
 {
     public class ClassManagerDbContext : IdentityDbContext<Usuario, IdentityRole<Guid>, Guid>
     {
+        public DbSet<Curso> Cursos { get; set; }
         public ClassManagerDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

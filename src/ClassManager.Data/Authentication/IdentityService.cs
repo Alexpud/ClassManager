@@ -1,7 +1,7 @@
 ﻿using ClassManager.Business.Dtos.Authentication;
 using ClassManager.Business.Entities;
 using ClassManager.Business.Notifications;
-using ClassManager.Business.Services.Concrete;
+using ClassManager.Business.Services;
 using ClassManager.Data.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

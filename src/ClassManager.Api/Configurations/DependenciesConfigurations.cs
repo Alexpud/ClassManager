@@ -1,12 +1,12 @@
 using Asp.Versioning;
 using ClassManager.Api.Identity;
 using ClassManager.Business.Authentication;
-using ClassManager.Business.Entities.Validators;
+using ClassManager.Business.Interfaces.Repositories;
+using ClassManager.Business.Interfaces.Services;
 using ClassManager.Business.Notifications;
 using ClassManager.Business.Profiles;
-using ClassManager.Business.Repositories;
-using ClassManager.Business.Services.Abstract;
-using ClassManager.Business.Services.Concrete;
+using ClassManager.Business.Services;
+using ClassManager.Business.Validators.Entities;
 using ClassManager.Data.Authentication;
 using ClassManager.Data.Context;
 using ClassManager.Data.Repositories;
@@ -62,6 +62,7 @@ public static class DependenciesConfigurations
     private static void ResolveValidators(IServiceCollection services)
     {
         services.AddValidatorsFromAssemblyContaining<UsuarioValidator>();
+        services.AddValidatorsFromAssemblyContaining<CriarCursoDtoValidator>();
     }
 
     private static void ResolveRepositories(IServiceCollection services)

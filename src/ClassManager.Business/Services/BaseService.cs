@@ -1,7 +1,7 @@
 using ClassManager.Business.Notifications;
 using FluentValidation;
 
-namespace ClassManager.Business.Services.Concrete;
+namespace ClassManager.Business.Services;
 
 public abstract class BaseService
 {
@@ -16,8 +16,8 @@ public abstract class BaseService
         var validation = validator.Validate(entidade);
         if (validation.IsValid)
             return true;
-
-        foreach(var error in validation.Errors)
+            
+        foreach (var error in validation.Errors)
             _notificationService.Handle(error.ErrorMessage);
 
         return false;
@@ -25,7 +25,7 @@ public abstract class BaseService
 
     protected void Notificar(IEnumerable<string> messages)
     {
-        foreach(var message in messages)
+        foreach (var message in messages)
             _notificationService.Handle(message);
     }
 

@@ -1,16 +1,14 @@
 using System.Net;
-using Asp.Versioning;
 using ClassManager.Business.Authentication;
 using ClassManager.Business.Dtos.Usuario;
 using ClassManager.Business.Entities;
+using ClassManager.Business.Interfaces.Services;
 using ClassManager.Business.Notifications;
-using ClassManager.Business.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Controllers;
 
-[ApiVersion("2.0")]
 [Route("api/[controller]")]
 public class UsuariosController : BaseController
 {
@@ -32,7 +30,7 @@ public class UsuariosController : BaseController
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    [Authorize(Roles = "Coordenador")]
+    // [Authorize(Roles = "Coordenador")]
     [ProducesResponseType(typeof(Usuario), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(CustomProblemDetails), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> Criar(UsuarioCriacaoDto dto) 

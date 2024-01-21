@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using ClassManager.Api.Configurations;
 using ClassManager.Api.Configurations.Swagger;
@@ -8,12 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.ConfigureApi(builder.Configuration);
 builder.Services.ConfigureSwagger();
 
-builder.Services.AddControllers()
+builder.Services
+    .AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -21,7 +19,6 @@ builder.Services.AddControllers()
 
 builder.Services.ResolveIdentity(builder.Configuration);
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
@@ -31,7 +28,6 @@ var dbContext = scope.ServiceProvider.GetRequiredService<ClassManagerDbContext>(
 dbContext.Database.Migrate();
 
 app.UseHsts();
-// Configure the HTTP request pipeline.
 
 var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
 app.UseSwaggerConfig(apiVersionDescriptionProvider);
