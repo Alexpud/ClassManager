@@ -30,7 +30,7 @@ public class UsuariosController : BaseController
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
-    [Authorize(Roles = "Coordenador")]
+    // [Authorize(Roles = "Coordenador")]
     [ProducesResponseType(typeof(Usuario), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(CustomProblemDetails), (int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> Criar(UsuarioCriacaoDto dto) 
