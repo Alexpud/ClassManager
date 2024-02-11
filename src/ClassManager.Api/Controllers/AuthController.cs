@@ -7,10 +7,11 @@ using System.Net;
 
 namespace ClassManager.Api.Controllers;
 
-public class AuthController : BaseController
+[ApiController]
+public class AuthController : ControllerBase
 {
-    private readonly IIdentityService _identityService;
-    public AuthController(INotificationServce notificationService, IIdentityService identityService) : base(notificationService)
+    private readonly IdentityService _identityService;
+    public AuthController(INotificationServce notificationService, IdentityService identityService)
     {
         _identityService = identityService;
     }
@@ -24,7 +25,12 @@ public class AuthController : BaseController
     [HttpPost("api/Login")]
     [ProducesResponseType(typeof(LoginResponseDto), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Login(LoginDto dto)
-        => CustomResponse(await _identityService.Login(dto));
+    {
+        var result = await _identityService.Login(dto);
+        if (result.IsFailed)
+            return BadRequest(result);
+        return Ok(result.Value);
+    }
 
     /// <summary>
     /// Cria uma nova role no Identity
@@ -35,7 +41,9 @@ public class AuthController : BaseController
     [Authorize(Roles = "Coordenador")]
     public async Task<IActionResult> CreateRole(RoleCreateDto dto)
     {
-        await _identityService.CriarRole(dto.Nome.ToString());
-        return CustomResponse();
+        var result  =await _identityService.CriarRole(dto.Nome.ToString());
+        if (result.IsFailed)
+            return BadRequest(result);
+        return NoContent();
     }
 }

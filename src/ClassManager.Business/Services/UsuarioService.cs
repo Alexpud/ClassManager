@@ -1,14 +1,14 @@
 using AutoMapper;
 using ClassManager.Business.Dtos.Usuario;
 using ClassManager.Business.Entities;
+using ClassManager.Business.Errors;
 using ClassManager.Business.Interfaces.Repositories;
-using ClassManager.Business.Interfaces.Services;
-using ClassManager.Business.Notifications;
+using FluentResults;
 using FluentValidation;
 
 namespace ClassManager.Business.Services;
 
-public class UsuarioService : BaseService, IUsuarioService
+public class UsuarioService
 {
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IMapper _mapper;
@@ -17,15 +17,14 @@ public class UsuarioService : BaseService, IUsuarioService
     public UsuarioService(
         IUsuarioRepository usuarioRepository,
         IValidator<Usuario> usuarioValidator,
-        INotificationServce notificationServce,
-        IMapper mapper) : base(notificationServce)
+        IMapper mapper)
     {
         _usuarioValidator = usuarioValidator;
         _usuarioRepository = usuarioRepository;
         _mapper = mapper;
     }
 
-    public async Task<Usuario?> Criar(UsuarioCriacaoDto dto)
+    public async Task<Result<Usuario>> Criar(UsuarioCriacaoDto dto)
     {
         var usuario = new Usuario()
         {
@@ -35,15 +34,14 @@ public class UsuarioService : BaseService, IUsuarioService
             SobreNome = dto.SobreNome
         };
 
-        if (!Validar(_usuarioValidator, usuario))
-            return null;
+        var result = new Result<Usuario>();
+        var validationResult = _usuarioValidator.Validate(usuario);
+        if (!validationResult.IsValid)
+            return result.WithErrors(validationResult.Errors.Select(p => new ValidationError(p.ErrorMessage)));
 
-        var result = await _usuarioRepository.Adicionar(usuario, dto.Password);
-        if (!result.Succeeded)
-        {
-            Notificar(result.Errors.Select(p => p.Description));
-            return null;
-        }
+        var repositoryAddResult = await _usuarioRepository.Adicionar(usuario, dto.Password);
+        if (!repositoryAddResult.Succeeded)
+            return result.WithErrors(repositoryAddResult.Errors.Select(p => new Error(p.Description)));
 
         return usuario;
     }

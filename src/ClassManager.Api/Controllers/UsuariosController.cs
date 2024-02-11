@@ -1,27 +1,21 @@
-using System.Net;
-using ClassManager.Business.Authentication;
 using ClassManager.Business.Dtos.Usuario;
 using ClassManager.Business.Entities;
-using ClassManager.Business.Interfaces.Services;
-using ClassManager.Business.Notifications;
+using ClassManager.Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ClassManager.Api.Controllers;
 
+[ApiController]
 [Route("api/[controller]")]
-public class UsuariosController : BaseController
+public class UsuariosController : ControllerBase
 {
-    private readonly IUsuarioService _usuarioService;
-    private readonly IUser _user;
+    private readonly UsuarioService _usuarioService;
 
-    public UsuariosController(
-        IUsuarioService usuarioService,
-        INotificationServce notificationServce,
-        IUser user) : base(notificationServce)
+    public UsuariosController(UsuarioService usuarioService)
     {
         _usuarioService = usuarioService;
-        this._user = user;
     }
 
     /// <summary>
@@ -30,11 +24,17 @@ public class UsuariosController : BaseController
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPost]
+    [AllowAnonymous]
     // [Authorize(Roles = "Coordenador")]
     [ProducesResponseType(typeof(Usuario), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(CustomProblemDetails), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> Criar(UsuarioCriacaoDto dto) 
-        => CustomResponse(await _usuarioService.Criar(dto));
+    public async Task<IActionResult> Criar(UsuarioCriacaoDto dto)
+    {
+        var result = await _usuarioService.Criar(dto);
+        if (result.IsFailed)
+            return BadRequest(result);
+        return Ok(result.Value);
+    }
 
     /// <summary>
     /// Obtém informações resumidas de um usuário pelo id.
@@ -45,8 +45,13 @@ public class UsuariosController : BaseController
     [Authorize(Policy = "Discentes")]
     [ProducesResponseType(typeof(UsuarioDto), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
-    public async Task<IActionResult> ObterDadosResumidosPorId(Guid id) 
-        => CustomResponse(await _usuarioService.ObterDadosResumidosPorId(id));
+    public async Task<IActionResult> ObterDadosResumidosPorId(Guid id)
+    {
+        var usuario = await _usuarioService.ObterDadosResumidosPorId(id);
+        if (usuario == null)
+            return NoContent();
+        return Ok(usuario);
+    }
 
     /// <summary>
     /// Obtém todos os registros de usuarios com informacoes resumidas

@@ -73,8 +73,8 @@ public static class DependenciesConfigurations
     private static void ResolveServices(IServiceCollection services)
     {
         services
-            .AddScoped<IUsuarioService, UsuarioService>()
+            .AddScoped<UsuarioService>()
             .AddScoped<INotificationServce, NotificationService>()
-            .AddScoped<IIdentityService, IdentityService>();
+            .AddScoped<IdentityService>();
     }
 }

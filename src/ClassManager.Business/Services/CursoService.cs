@@ -2,13 +2,15 @@
 using ClassManager.Business.Dtos.Curso;
 using ClassManager.Business.Entities;
 using ClassManager.Business.Enums;
+using ClassManager.Business.Errors;
 using ClassManager.Business.Interfaces.Repositories;
 using ClassManager.Business.Notifications;
+using FluentResults;
 using FluentValidation;
 
 namespace ClassManager.Business.Services;
 
-public class CursoService : BaseService
+public class CursoService
 {
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly ICursoRepository _cursoRepository;
@@ -20,7 +22,7 @@ public class CursoService : BaseService
         IUsuarioRepository usuarioRepository,
         ICursoRepository cursoRepository,
         IValidator<CriarCursoDto> validator,
-        IMapper mapper) : base(notificationServce)
+        IMapper mapper)
     {
         _usuarioRepository = usuarioRepository;
         _cursoRepository = cursoRepository;
@@ -34,20 +36,17 @@ public class CursoService : BaseService
         return _mapper.Map<List<CursoDto>>(cursos);
     }
 
-    public async Task<CursoDto> CriarCurso(CriarCursoDto dto)
+    public async Task<Result<CursoDto>> CriarCurso(CriarCursoDto dto)
     {
-        if (!Validar(_criarCursoDtoValidator, dto))
-            return null;
-
-        if (dto.ProfessorId == Guid.Empty)
-            _notificationService.Handle("Não pode criar curso sem professor");
+        var result = new Result<CursoDto>();
+        var validationResult = _criarCursoDtoValidator.Validate(dto);
+        if (!validationResult.IsValid)
+            return result.WithErrors(validationResult.Errors.Select(p => new ValidationError(p.ErrorMessage)));
 
         var usuario = await _usuarioRepository.ObterPorId(dto.ProfessorId);
         if (usuario == null || usuario.Tipo != TipoUsuario.Professor)
-        {
-            _notificationService.Handle("Professor não foi encontrado");
-            return null;
-        }
+            return result.WithError("Professor não foi encontrado");
+        
         var curso = new Curso
         {
             ProfessorId = dto.ProfessorId,

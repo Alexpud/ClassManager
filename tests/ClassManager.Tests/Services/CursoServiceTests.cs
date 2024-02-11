@@ -2,6 +2,7 @@
 using ClassManager.Business.Dtos.Curso;
 using ClassManager.Business.Entities;
 using ClassManager.Business.Enums;
+using ClassManager.Business.Errors;
 using ClassManager.Business.Interfaces.Repositories;
 using ClassManager.Business.Notifications;
 using ClassManager.Business.Services;
@@ -30,8 +31,8 @@ public class CursoServiceTests
         _sut = new CursoService(_notificationService, _usuarioRepository, _cursoRepository, _criarCursoDtoValidator, _mapper);
     }
 
-    [Fact(DisplayName = "Criar Curso com dados inválidos deve falhar")]
     [Trait("Categoria", "Curso")]
+    [Fact(DisplayName = "Criar Curso com dados inválidos deve falhar")]
     public async Task CriarCurso_DadosInvalidos_DeveFalhar()
     {
         // Arrange
@@ -44,32 +45,11 @@ public class CursoServiceTests
         });
 
         //  Act
-        await _sut.CriarCurso(new CriarCursoDto());
+        var result = await _sut.CriarCurso(new CriarCursoDto());
 
         // Assert
-        _notificationService.Received().Handle(Arg.Any<string>());
-    }
-
-    [Trait("Categoria", "Curso")]
-    [Fact(DisplayName = "Criar Curso com professor que não existe deve falhar")]
-    public async Task CriarCurso_ProfessorNaoExiste_DeveFalhar()
-    {
-        // Arrange
-        var dto = new CriarCursoDto
-        {
-            ProfessorId = Guid.NewGuid(),
-        };
-
-        _criarCursoDtoValidator.Validate(Arg.Any<CriarCursoDto>())
-            .Returns(new ValidationResult());
-
-        _usuarioRepository.ObterPorId(Arg.Any<Guid>())
-            .ReturnsNull();
-        // Act
-         await _sut.CriarCurso(dto);
-
-        // Assert
-        _notificationService.Received().Handle(Arg.Any<string>());
+        Assert.True(result.IsFailed);
+        Assert.True(result.HasError<ValidationError>());
     }
 
     [Trait("Categoria", "Curso")]
@@ -91,14 +71,16 @@ public class CursoServiceTests
             });
 
         // Act
-        await _sut.CriarCurso(dto);
+        var result = await _sut.CriarCurso(dto);
 
         // Assert
-        _notificationService.Received().Handle(Arg.Any<string>());
+        Assert.True(result.IsFailed);
+        Assert.True(result.HasError(p => p.Message == "Professor não foi encontrado"));
+        _usuarioRepository.Received(1).ObterPorId(Arg.Any<Guid>());
     }
 
     [Trait("Categoria", "Curso")]
-    [Fact(DisplayName = "Criar Curso funciona corretamente")]
+    [Fact(DisplayName = "Criar Curso deve ser bem sucedido")]
     public async Task CriarCurso_CriaCursoComSucesso()
     {
         // Arrange
