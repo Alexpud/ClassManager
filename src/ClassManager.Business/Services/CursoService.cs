@@ -42,7 +42,7 @@ public class CursoService
             return result.WithErrors(validationResult.Errors.Select(p => new ValidationError(p.ErrorMessage)));
 
         var usuario = await _usuarioRepository.ObterPorId(dto.ProfessorId);
-        if (usuario == null || usuario.Tipo != TipoUsuario.Professor)
+        if (usuario?.Tipo != TipoUsuario.Professor)
             return result.WithError("Professor não foi encontrado");
         
         var curso = new Curso
