@@ -1,5 +1,4 @@
 using ClassManager.Business.Dtos.Authentication;
-using ClassManager.Business.Notifications;
 using ClassManager.Data.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,11 +6,12 @@ using System.Net;
 
 namespace ClassManager.Api.Controllers;
 
+[Authorize]
 [ApiController]
 public class AuthController : ControllerBase
 {
     private readonly IdentityService _identityService;
-    public AuthController(INotificationServce notificationService, IdentityService identityService)
+    public AuthController(IdentityService identityService)
     {
         _identityService = identityService;
     }

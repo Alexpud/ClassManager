@@ -5,9 +5,9 @@ namespace ClassManager.Business.Tests.Validators.Dtos;
 
 public class CriarCursoDtoValidatorTests 
 {
-    [Fact(DisplayName = "Validate CriarCursoDto dados invalidos deve falhar")]
+    [Fact(DisplayName = "TestValidate CriarCursoDto dados invalidos deve falhar")]
     [Trait("Categoria", "Validators")]
-    public void Validate_DadosInvalidos_DeveRetornarComFalhas()
+    public void TestValidate_RetornarComFalhas_QuandoDadosInvalidos()
     {
         // Arrange
         var criarCursoDto = new CriarCursoDto
@@ -25,9 +25,9 @@ public class CriarCursoDtoValidatorTests
         result.ShouldHaveValidationErrorFor(p => p.ProfessorId).WithErrorMessage("Não pode criar curso sem professor");
     }
 
-    [Fact(DisplayName = "Validate CriarCursoDto dados validos deve ser bem sucedido")]
+    [Fact(DisplayName = "TestValidate CriarCursoDto dados validos deve ser bem sucedido")]
     [Trait("Categoria", "Validators")]
-    public void Validate_DadosValidos_DeveRetornarSemFalhas()
+    public void TestValidate_ExecutaComSucesso_QuandoDadosValidos()
     {
         // Arrange
         var criarCursoDto = new CriarCursoDto

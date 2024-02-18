@@ -7,6 +7,7 @@ using System.Net;
 
 namespace ClassManager.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class UsuariosController : ControllerBase
@@ -27,8 +28,8 @@ public class UsuariosController : ControllerBase
     [AllowAnonymous]
     // [Authorize(Roles = "Coordenador")]
     [ProducesResponseType(typeof(Usuario), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(CustomProblemDetails), (int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> Criar(UsuarioCriacaoDto dto)
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> Criar(CriarUsuarioDto dto)
     {
         var result = await _usuarioService.Criar(dto);
         if (result.IsFailed)

@@ -4,7 +4,6 @@ using ClassManager.Business.Entities;
 using ClassManager.Business.Enums;
 using ClassManager.Business.Errors;
 using ClassManager.Business.Interfaces.Repositories;
-using ClassManager.Business.Notifications;
 using FluentResults;
 using FluentValidation;
 
@@ -18,7 +17,6 @@ public class CursoService
     private readonly IMapper _mapper;
 
     public CursoService(
-        INotificationServce notificationServce,
         IUsuarioRepository usuarioRepository,
         ICursoRepository cursoRepository,
         IValidator<CriarCursoDto> validator,

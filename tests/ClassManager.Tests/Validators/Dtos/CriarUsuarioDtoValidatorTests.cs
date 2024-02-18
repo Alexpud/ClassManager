@@ -1,23 +1,24 @@
+using ClassManager.Business.Dtos.Usuario;
 using ClassManager.Business.Entities;
 using ClassManager.Business.Validators.Entities;
 using FluentValidation.TestHelper;
 
-namespace ClassManager.Business.Tests.Validators.Entities;
+namespace ClassManager.Business.Tests.Validators.Dtos;
 
-public class UsuarioValidatorTests
+public class CriarUsuarioDtoValidatorTests
 {
-    private readonly UsuarioValidator _sut;
-    public UsuarioValidatorTests()
+    private readonly CriarUsuarioDtoValidator _sut;
+    public CriarUsuarioDtoValidatorTests()
     {
-        _sut = new UsuarioValidator();
+        _sut = new CriarUsuarioDtoValidator();
     }
 
-    [Fact(DisplayName = "Validate Usuario nome vazio")]
-    [Trait("Categoria", "Validators")]
-    public void Validate_NomeVazio_DeveRetornarComErros()
+    [Fact(DisplayName = "TestValidate deve falhar quando nome do usuário é vazio")]
+    [Trait("Categoria", "Usuario")]
+    public void TestValidate_Falha_QuandoNomeVazio()
     {
         // Arrange
-        var usuario = new Usuario
+        var usuario = new CriarUsuarioDto
         {
             Nome = null
         };
@@ -29,13 +30,13 @@ public class UsuarioValidatorTests
         validationResult.ShouldHaveValidationErrorFor(p => p.Nome);
     }
 
-    
-    [Fact(DisplayName = "Validate Usuario sobrenome vazio")]
-    [Trait("Categoria", "Validators")]
-    public void Validate_SobreNomeVazio_DeveRetornarComErros()
+
+    [Fact(DisplayName = "TestValidate deve falhar quando sobre nome do usuário é vazio")]
+    [Trait("Categoria", "Usuario")]
+    public void TestValidate_Falha_QuandoSobreNomeVazio()
     {
         // Arrange
-        var usuario = new Usuario
+        var usuario = new CriarUsuarioDto
         {
             SobreNome = null
         };
@@ -47,12 +48,12 @@ public class UsuarioValidatorTests
         validationResult.ShouldHaveValidationErrorFor(p => p.SobreNome);
     }
 
-    [Fact(DisplayName = "Validate Usuario nome maior que limite")]
-    [Trait("Categoria", "Validator")]
-    public void Validate_DeveTerErro_NomeMaiorQueLimite()
+    [Fact(DisplayName = "TestValidate deve falhar quando nome do usuário nome maior que limite")]
+    [Trait("Categoria", "Usuario")]
+    public void TestValidate_Falha_QuandoNomeMaiorQueLimite()
     {
         // Arrange
-        var usuario = new Usuario
+        var usuario = new CriarUsuarioDto
         {
             Nome = new string(Enumerable.Repeat('a', 51).ToArray())
         };
@@ -64,12 +65,12 @@ public class UsuarioValidatorTests
         validationResult.ShouldHaveValidationErrorFor(p => p.Nome);
     }
 
-    [Fact(DisplayName = "Validate Usuario sobrenome maior que limte")]
-    [Trait("Categoria", "Validator")]
-    public void Validate_DeveTerErro_SobreNomeMaiorQueLimite()
+    [Fact(DisplayName = "TestValidate deve falhar quando sobrenome do usuario maior que limite")]
+    [Trait("Categoria", "Usuario")]
+    public void TestValidate_Falha_QuandoSobreNomeMaiorQueLimite()
     {
         // Arrange
-        var usuario = new Usuario
+        var usuario = new CriarUsuarioDto
         {
             SobreNome = new string(Enumerable.Repeat('a', 51).ToArray())
         };
@@ -83,11 +84,11 @@ public class UsuarioValidatorTests
 
 
     [Fact(DisplayName = "Validate usuario dados validos")]
-    [Trait("Categoria", "Validator")]
-    public void Validate_DadosValidos_DeveRetornarSemFalhas()
+    [Trait("Categoria", "Usuario")]
+    public void TestValidate_ExecutaComSucesso_QuandoDadosValidos()
     {
         // Arrange
-        var usuario = new Usuario
+        var usuario = new CriarUsuarioDto
         {
             Nome = "Joao",
             SobreNome = "Mario"

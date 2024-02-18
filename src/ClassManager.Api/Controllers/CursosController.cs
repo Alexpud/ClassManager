@@ -1,14 +1,12 @@
-using System.Net;
-using System.Reflection.Metadata.Ecma335;
-using ClassManager.Api.Controllers;
 using ClassManager.Business.Dtos.Curso;
-using ClassManager.Business.Notifications;
 using ClassManager.Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ClassManager.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class CursosController : ControllerBase

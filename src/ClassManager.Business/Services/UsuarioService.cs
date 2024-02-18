@@ -12,11 +12,11 @@ public class UsuarioService
 {
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IMapper _mapper;
-    private readonly IValidator<Usuario> _usuarioValidator;
+    private readonly IValidator<CriarUsuarioDto> _usuarioValidator;
 
     public UsuarioService(
         IUsuarioRepository usuarioRepository,
-        IValidator<Usuario> usuarioValidator,
+        IValidator<CriarUsuarioDto> usuarioValidator,
         IMapper mapper)
     {
         _usuarioValidator = usuarioValidator;
@@ -24,7 +24,7 @@ public class UsuarioService
         _mapper = mapper;
     }
 
-    public async Task<Result<Usuario>> Criar(UsuarioCriacaoDto dto)
+    public async Task<Result<Usuario>> Criar(CriarUsuarioDto dto)
     {
         var usuario = new Usuario()
         {
@@ -33,9 +33,8 @@ public class UsuarioService
             Nome = dto.Nome,
             SobreNome = dto.SobreNome
         };
-
         var result = new Result<Usuario>();
-        var validationResult = _usuarioValidator.Validate(usuario);
+        var validationResult = _usuarioValidator.Validate(dto);
         if (!validationResult.IsValid)
             return result.WithErrors(validationResult.Errors.Select(p => new ValidationError(p.ErrorMessage)));
 
