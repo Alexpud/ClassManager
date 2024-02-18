@@ -4,15 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ClassManager.Data.Context.Configurations;
 
-internal class CursoTypeConfiguration : IEntityTypeConfiguration<Curso>
+internal class TurmaTypeConfiguration : IEntityTypeConfiguration<Turma>
 {
-    public void Configure(EntityTypeBuilder<Curso> builder)
+    public void Configure(EntityTypeBuilder<Turma> builder)
     {
         builder.Property(p => p.Nome)
-            .IsRequired()
-            .HasMaxLength(200);
-
-        builder.Property(p => p.Tags)
             .IsRequired()
             .HasMaxLength(200);
 

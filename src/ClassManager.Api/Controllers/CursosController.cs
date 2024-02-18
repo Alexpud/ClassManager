@@ -1,4 +1,6 @@
+using AutoMapper;
 using ClassManager.Business.Dtos.Curso;
+using ClassManager.Business.Interfaces.Repositories;
 using ClassManager.Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +14,16 @@ namespace ClassManager.Api.Controllers;
 public class CursosController : ControllerBase
 {
     private readonly CursoService _cursoService;
-    public CursosController(CursoService cursoService)
+    private readonly ICursoRepository _cursoRepository;
+    private readonly IMapper _mapper;
+
+    public CursosController(CursoService cursoService,
+        ICursoRepository cursoRepository,
+        IMapper mapper)
     {
         _cursoService = cursoService;
+        _cursoRepository = cursoRepository;
+        _mapper = mapper;
     }
 
     /// <summary>
@@ -35,9 +44,25 @@ public class CursosController : ControllerBase
         return Ok(result.Value);
     }
 
+    /// <summary>
+    /// Responsável por listar todos os cursos
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     [Authorize(Policy = "Discentes")]
     [ProducesResponseType(typeof(List<CursoDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> ObterTodos()
-        => Ok(await _cursoService.ObterTodos());
+        => Ok(_mapper.Map<List<CursoDto>>(await _cursoRepository.ObterTodos()));
+
+    /// <summary>
+    /// Responsável por obter curso pelo ID
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("{id:guid}")]
+    [Authorize(Policy = "Discentes")]
+    [ProducesResponseType(typeof(CursoDto), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> ObterPorId(Guid id)
+        => Ok(_mapper.Map<CursoDto>(await _cursoRepository.ObterPorId(id)));
+
 }

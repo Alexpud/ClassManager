@@ -13,7 +13,6 @@ public class CriarCursoDtoValidatorTests
         var criarCursoDto = new CriarCursoDto
         {
             Nome = null,
-            ProfessorId = Guid.Empty
         };
 
         // Act
@@ -22,7 +21,6 @@ public class CriarCursoDtoValidatorTests
         // Assert
         Assert.False(result.IsValid);
         result.ShouldHaveValidationErrorFor(p => p.Nome).WithErrorMessage("Não pode criar curso sem nome");
-        result.ShouldHaveValidationErrorFor(p => p.ProfessorId).WithErrorMessage("Não pode criar curso sem professor");
     }
 
     [Fact(DisplayName = "TestValidate CriarCursoDto dados validos deve ser bem sucedido")]
@@ -33,7 +31,6 @@ public class CriarCursoDtoValidatorTests
         var criarCursoDto = new CriarCursoDto
         {
             Nome = "Nome",
-            ProfessorId = Guid.NewGuid()
         };
 
         // Act

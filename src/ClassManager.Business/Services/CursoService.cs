@@ -28,12 +28,6 @@ public class CursoService
         _mapper = mapper;
     }
 
-    public async Task<List<CursoDto>> ObterTodos()
-    {
-        var cursos = await _cursoRepository.ObterTodos();
-        return _mapper.Map<List<CursoDto>>(cursos);
-    }
-
     public async Task<Result<CursoDto>> CriarCurso(CriarCursoDto dto)
     {
         var result = new Result<CursoDto>();
@@ -41,13 +35,8 @@ public class CursoService
         if (!validationResult.IsValid)
             return result.WithErrors(validationResult.Errors.Select(p => new ValidationError(p.ErrorMessage)));
 
-        var usuario = await _usuarioRepository.ObterPorId(dto.ProfessorId);
-        if (usuario?.Tipo != TipoUsuario.Professor)
-            return result.WithError("Professor não foi encontrado");
-        
         var curso = new Curso
         {
-            ProfessorId = dto.ProfessorId,
             Nome = dto.Nome,
             Tags = string.Join(",", dto.Tags)
         };

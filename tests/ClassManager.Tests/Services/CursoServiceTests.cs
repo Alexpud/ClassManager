@@ -48,32 +48,6 @@ public class CursoServiceTests
         Assert.True(result.HasError<ValidationError>());
     }
 
-    [Trait("Categoria", "Curso")]
-    [Fact(DisplayName = "Criar Curso com usuario que não é professor deve falhar")]
-    public async Task CriarCurso_Falha_QuandoUsuarioNaoProfessor()
-    {
-        // Arrange
-        var dto = new CriarCursoDto
-        {
-            ProfessorId = Guid.NewGuid(),
-        };
-        _criarCursoDtoValidator.Validate(Arg.Any<CriarCursoDto>())
-            .Returns(new ValidationResult());
-        
-        _usuarioRepository.ObterPorId(dto.ProfessorId)
-            .Returns(new Usuario()
-            {
-                Tipo = TipoUsuario.Aluno
-            });
-
-        // Act
-        var result = await _sut.CriarCurso(dto);
-
-        // Assert
-        Assert.True(result.IsFailed);
-        Assert.True(result.HasError(p => p.Message == "Professor não foi encontrado"));
-        _usuarioRepository.Received(1).ObterPorId(Arg.Any<Guid>());
-    }
 
     [Trait("Categoria", "Curso")]
     [Fact(DisplayName = "Criar Curso deve ser bem sucedido")]
@@ -82,19 +56,12 @@ public class CursoServiceTests
         // Arrange
         var dto = new CriarCursoDto
         {
-            ProfessorId = Guid.NewGuid(),
             Nome = "Nome de curso",
             Tags = new List<string>()
         };
 
         _criarCursoDtoValidator.Validate(Arg.Any<CriarCursoDto>())
             .Returns(new ValidationResult());
-
-        _usuarioRepository.ObterPorId(dto.ProfessorId)
-            .Returns(new Usuario()
-            {
-                Tipo = TipoUsuario.Professor
-            });
 
         _mapper.Map<CursoDto>(Arg.Any<Curso>())
             .Returns(new CursoDto());
@@ -103,6 +70,6 @@ public class CursoServiceTests
         var cursoDto = await _sut.CriarCurso(dto);
 
         // Assert
-        _cursoRepository.Received(1).Adicionar(Arg.Is<Curso>(p => p.ProfessorId == dto.ProfessorId && p.Nome == dto.Nome));
+        _cursoRepository.Received(1).Adicionar(Arg.Any<Curso>());
     }
 }

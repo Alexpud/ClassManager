@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClassManager.Data.Repositories;
 
-public abstract class BaseRepository<TEntity>  : IBaseRepository<TEntity>  where TEntity : BaseEntity, new()
+public abstract class BaseRepository<TEntity>  : IBaseRepository<TEntity>  where TEntity : BaseEntity,  new()
 {
     private readonly ClassManagerDbContext _dbContext;
     private DbSet<TEntity> _set;
