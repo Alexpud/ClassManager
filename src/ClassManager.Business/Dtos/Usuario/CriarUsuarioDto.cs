@@ -2,7 +2,7 @@ using ClassManager.Business.Enums;
 
 namespace ClassManager.Business.Dtos.Usuario;
 
-public class UsuarioCriacaoDto
+public class CriarUsuarioDto
 {
     public string? Nome { get; set; }
     public string? SobreNome { get; set; }

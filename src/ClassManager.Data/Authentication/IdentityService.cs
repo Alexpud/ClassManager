@@ -1,8 +1,7 @@
 ﻿using ClassManager.Business.Dtos.Authentication;
 using ClassManager.Business.Entities;
-using ClassManager.Business.Notifications;
-using ClassManager.Business.Services;
 using ClassManager.Data.Options;
+using FluentResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -13,7 +12,7 @@ using System.Text;
 
 namespace ClassManager.Data.Authentication;
 
-public class IdentityService : BaseService, IIdentityService
+public class IdentityService
 {
     private readonly SignInManager<Usuario> _siginManager;
     private readonly RoleManager<IdentityRole<Guid>> _roleManager;
@@ -21,22 +20,18 @@ public class IdentityService : BaseService, IIdentityService
     public IdentityService(
         SignInManager<Usuario> siginManager,
         IOptions<AuthenticationSettings> options,
-        RoleManager<IdentityRole<Guid>> roleManager,
-        INotificationServce notificationServce) : base(notificationServce)
+        RoleManager<IdentityRole<Guid>> roleManager)
     {
         _siginManager = siginManager;
         _roleManager = roleManager;
         _settings = options.Value;
     }
 
-    public async Task<LoginResponseDto> Login(LoginDto dto)
+    public async Task<Result<LoginResponseDto>> Login(LoginDto dto)
     {
-
+        var result = new Result<LoginResponseDto>();
         if (!await CredenciaisSaoValidas(dto.UserName, dto.Password))
-        {
-            Notificar("Login ou senha incorretas");
-            return null;
-        }
+            return result.WithError("Credenciais invalidas");
 
         var tokenJwt = await GerarTokenAcesso(dto.UserName);
         return new LoginResponseDto
@@ -76,11 +71,13 @@ public class IdentityService : BaseService, IIdentityService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public async Task CriarRole(string nome)
+    public async Task<Result> CriarRole(string nome)
     {
+        var result = new Result();
         var identityResult = await _roleManager.CreateAsync(new IdentityRole<Guid>(nome));
         if (!identityResult.Succeeded)
-            Notificar(identityResult.Errors.Select(p => p.Description));
+            return result.WithErrors(identityResult.Errors.Select(p => new Error(p.Description)));
+        return result;
     }
 
 }

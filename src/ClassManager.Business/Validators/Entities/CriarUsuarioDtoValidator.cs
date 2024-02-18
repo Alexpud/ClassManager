@@ -1,11 +1,11 @@
-using ClassManager.Business.Entities;
+using ClassManager.Business.Dtos.Usuario;
 using FluentValidation;
 
 namespace ClassManager.Business.Validators.Entities;
 
-public class UsuarioValidator : AbstractValidator<Usuario>
+public class CriarUsuarioDtoValidator : AbstractValidator<CriarUsuarioDto>
 {
-    public UsuarioValidator()
+    public CriarUsuarioDtoValidator()
     {
         RuleFor(p => p.Nome)
             .Must(p => !string.IsNullOrEmpty(p) && !string.IsNullOrWhiteSpace(p))

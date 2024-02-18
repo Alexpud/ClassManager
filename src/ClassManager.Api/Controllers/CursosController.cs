@@ -1,20 +1,18 @@
-using System.Net;
-using ClassManager.Api.Controllers;
 using ClassManager.Business.Dtos.Curso;
-using ClassManager.Business.Notifications;
 using ClassManager.Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ClassManager.Api.Controllers;
 
+[Authorize]
+[ApiController]
 [Route("api/[controller]")]
-public class CursosController : BaseController
+public class CursosController : ControllerBase
 {
     private readonly CursoService _cursoService;
-    public CursosController(
-        CursoService cursoService, 
-        INotificationServce notificationService) : base(notificationService)
+    public CursosController(CursoService cursoService)
     {
         _cursoService = cursoService;
     }
@@ -27,12 +25,19 @@ public class CursosController : BaseController
     [HttpPost("")]
     [Authorize(Policy = "Discentes")]
     [ProducesResponseType(typeof(CursoDto), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> Criar(CriarCursoDto dto) 
-        => CustomResponse(await _cursoService.CriarCurso(dto));
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> Criar(CriarCursoDto dto)
+    { 
+        var result = await _cursoService.CriarCurso(dto);
+        if (result.IsFailed)
+            return BadRequest(result);
+
+        return Ok(result.Value);
+    }
 
     [HttpGet]
     [Authorize(Policy = "Discentes")]
     [ProducesResponseType(typeof(List<CursoDto>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> ObterTodos()
-        => CustomResponse(await _cursoService.ObterTodos());
+        => Ok(await _cursoService.ObterTodos());
 }

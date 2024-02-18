@@ -2,37 +2,34 @@
 using ClassManager.Business.Dtos.Curso;
 using ClassManager.Business.Entities;
 using ClassManager.Business.Enums;
+using ClassManager.Business.Errors;
 using ClassManager.Business.Interfaces.Repositories;
-using ClassManager.Business.Notifications;
 using ClassManager.Business.Services;
 using FluentValidation;
 using FluentValidation.Results;
 using NSubstitute;
-using NSubstitute.ReturnsExtensions;
 
 namespace ClassManager.Business.Tests.Services;
 
 public class CursoServiceTests
 {
     private readonly CursoService _sut;
-    private readonly INotificationServce _notificationService;
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly ICursoRepository _cursoRepository;
     private readonly IValidator<CriarCursoDto> _criarCursoDtoValidator;
     private readonly IMapper _mapper;
     public CursoServiceTests()
     {
-        _notificationService = Substitute.For<INotificationServce>();
         _usuarioRepository = Substitute.For<IUsuarioRepository>();
         _criarCursoDtoValidator = Substitute.For<IValidator<CriarCursoDto>>();
         _cursoRepository = Substitute.For<ICursoRepository>();
         _mapper = Substitute.For<IMapper>();
-        _sut = new CursoService(_notificationService, _usuarioRepository, _cursoRepository, _criarCursoDtoValidator, _mapper);
+        _sut = new CursoService(_usuarioRepository, _cursoRepository, _criarCursoDtoValidator, _mapper);
     }
 
-    [Fact(DisplayName = "Criar Curso com dados inválidos deve falhar")]
     [Trait("Categoria", "Curso")]
-    public async Task CriarCurso_DadosInvalidos_DeveFalhar()
+    [Fact(DisplayName = "Criar Curso com dados inválidos deve falhar")]
+    public async Task CriarCurso_Falha_QuandoDadosInvalidos()
     {
         // Arrange
         _criarCursoDtoValidator.Validate(Arg.Any<CriarCursoDto>()).Returns(new ValidationResult
@@ -44,37 +41,16 @@ public class CursoServiceTests
         });
 
         //  Act
-        await _sut.CriarCurso(new CriarCursoDto());
+        var result = await _sut.CriarCurso(new CriarCursoDto());
 
         // Assert
-        _notificationService.Received().Handle(Arg.Any<string>());
-    }
-
-    [Trait("Categoria", "Curso")]
-    [Fact(DisplayName = "Criar Curso com professor que não existe deve falhar")]
-    public async Task CriarCurso_ProfessorNaoExiste_DeveFalhar()
-    {
-        // Arrange
-        var dto = new CriarCursoDto
-        {
-            ProfessorId = Guid.NewGuid(),
-        };
-
-        _criarCursoDtoValidator.Validate(Arg.Any<CriarCursoDto>())
-            .Returns(new ValidationResult());
-
-        _usuarioRepository.ObterPorId(Arg.Any<Guid>())
-            .ReturnsNull();
-        // Act
-         await _sut.CriarCurso(dto);
-
-        // Assert
-        _notificationService.Received().Handle(Arg.Any<string>());
+        Assert.True(result.IsFailed);
+        Assert.True(result.HasError<ValidationError>());
     }
 
     [Trait("Categoria", "Curso")]
     [Fact(DisplayName = "Criar Curso com usuario que não é professor deve falhar")]
-    public async Task CriarCurso_UsuarioNaoProfessor_DeveFalhar()
+    public async Task CriarCurso_Falha_QuandoUsuarioNaoProfessor()
     {
         // Arrange
         var dto = new CriarCursoDto
@@ -91,15 +67,17 @@ public class CursoServiceTests
             });
 
         // Act
-        await _sut.CriarCurso(dto);
+        var result = await _sut.CriarCurso(dto);
 
         // Assert
-        _notificationService.Received().Handle(Arg.Any<string>());
+        Assert.True(result.IsFailed);
+        Assert.True(result.HasError(p => p.Message == "Professor não foi encontrado"));
+        _usuarioRepository.Received(1).ObterPorId(Arg.Any<Guid>());
     }
 
     [Trait("Categoria", "Curso")]
-    [Fact(DisplayName = "Criar Curso funciona corretamente")]
-    public async Task CriarCurso_CriaCursoComSucesso()
+    [Fact(DisplayName = "Criar Curso deve ser bem sucedido")]
+    public async Task CriarCurso_ExecutaComSucesso()
     {
         // Arrange
         var dto = new CriarCursoDto
